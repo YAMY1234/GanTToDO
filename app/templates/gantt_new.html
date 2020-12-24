@@ -1,0 +1,1460 @@
+<!DOCTYPE html>
+
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+	<title>gantt管理</title>
+	<link rel="icon" href="data:image/ico;base64,aWNv">
+	<script src="../static/lib/gantt/codebase/dhtmlxgantt.js"></script>
+	<script src="../static/lib/gantt/codebase/ext/dhtmlxgantt_quick_info.js"></script>
+	<script src="../static/lib/gantt/codebase/ext/dhtmlxgantt_tooltip.js"></script>
+	<script src="../static/lib/gantt/codebase/ext/dhtmlxgantt_keyboard_navigation.js"></script>
+	<script src="../static/lib/gantt/codebase/ext/dhtmlxgantt_marker.js"></script>
+	<script src="../static/lib/gantt/codebase/ext/dhtmlxgantt_undo.js"></script>
+	<link id="skin" rel="stylesheet" href="../static/lib/gantt/codebase/dhtmlxgantt.css">
+	<link rel="stylesheet" type="text/css" href="../static/lib/gantt/common/docs.css">
+	<link id="bg" rel="stylesheet" href="../static/lib/basic/css/background.css">
+	<!--	<script src="../static/gantt/codebase/common/testdata.js"></script> -->
+	
+<!--	导航栏部分-->
+<!-- <link rel="stylesheet" type="text/css" href="css/nav.css">
+<link rel="stylesheet" type="text/css" href="font/iconfont.css">
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/nav.js"></script> -->
+	
+	<style>
+		html,
+		body {
+			height: 100%;
+			padding: 0px;
+			margin: 0px;
+			overflow: hidden;
+			opacity: 0.9;
+			background: url(../static/image/HOME1.jpg);
+			background-size: cover;
+		}
+
+		.controls {
+			padding: 5px 0;
+			text-align: center;
+		}
+
+		.controls button {
+			margin: 0 10px;
+			padding: 5px;
+		}
+
+		.controlls tell {
+			align-items: flex-start;
+			margin: 0 10px;
+			padding: 5px;
+		}
+
+		/*	红线有关*/
+		.status_line {
+			background-color: #0ca30a;
+		}
+
+		.red .gantt_cell,
+		.odd.red .gantt_cell,
+		.red .gantt_task_cell,
+		.odd.red .gantt_task_cell {
+			background-color: #FDE0E0;
+		}
+
+		.green .gantt_cell,
+		.odd.green .gantt_cell,
+		.green .gantt_task_cell,
+		.odd.green .gantt_task_cell {
+			background-color: #BEE4BE;
+		}
+
+		/*		link*/
+		.gantt_task_link.start_to_start .gantt_line_wrapper div {
+			background-color: #dd5640;
+		}
+
+		.gantt_task_link.start_to_start:hover .gantt_line_wrapper div {
+			box-shadow: 0 0 5px 0px #dd5640;
+		}
+
+		.gantt_task_link.start_to_start .gantt_link_arrow_right {
+			border-left-color: #dd5640;
+		}
+
+		.gantt_task_link.finish_to_start .gantt_line_wrapper div {
+			background-color: #7576ba;
+		}
+
+		.gantt_task_link.finish_to_start:hover .gantt_line_wrapper div {
+			box-shadow: 0 0 5px 0px #7576ba;
+		}
+
+		.gantt_task_link.finish_to_start .gantt_link_arrow_right {
+			border-left-color: #7576ba;
+		}
+
+		.gantt_task_link.finish_to_finish .gantt_line_wrapper div {
+			background-color: #55d822;
+		}
+
+		.gantt_task_link.finish_to_finish:hover .gantt_line_wrapper div {
+			box-shadow: 0 0 5px 0px #55d822;
+		}
+
+		.gantt_task_link.finish_to_finish .gantt_link_arrow_left {
+			border-right-color: #55d822;
+		}
+
+		/*//tasks  另外除了下面的这几个之外我还想除了优先级之外，对于临近1ddl的完成情况这个也应当设置一个标准才行，针对于这个东西会计算不同的优先级进行提示*/
+		.high {
+			border: 2px solid #d96c49;
+			color: #d96c49;
+			background: #d96c49;
+		}
+
+		.high .gantt_task_progress {
+			background: #db2536;
+		}
+
+		.medium {
+			border: 2px solid #34c461;
+			color: #34c461;
+			background: #34c461;
+		}
+
+		.medium .gantt_task_progress {
+			background: #23964d;
+		}
+
+		.low {
+			border: 2px solid #6ba8e3;
+			color: #6ba8e3;
+			background: #6ba8e3;
+		}
+
+		.low .gantt_task_progress {
+			background: #547dab;
+		}
+
+		/*		对于周末的特殊化显示处理*/
+		.weekend {
+			background: #f4f7f4;
+		}
+
+		.gantt_selected .weekend {
+			background: #f7eb91;
+		}
+
+		/*		progress部分的显示问题*/
+		.gantt_task_progress {
+			text-align: left;
+			padding-left: 10px;
+			box-sizing: border-box;
+			color: white;
+			font-weight: bold;
+		}
+
+		/*		fillter部分，根据优先级进行筛选的按钮*/
+		.filters_wrapper {
+			line-height: 12px;
+			font-size: 12px;
+		}
+
+		.filters_wrapper span {
+			font-weight: bold;
+			padding-right: 5px;
+		}
+
+		.filters_wrapper label {
+			padding-right: 3px;
+		}
+
+		/*		slideNavigator*/
+		.sidenav {
+			height: 100%;
+			width: 0;
+			position: fixed;
+			z-index: 1;
+			top: 0;
+			left: 0;
+			/*    background-color: #111;*/
+			/*	background-image: linear-gradient(to right, rgb(0,220,255) 13%, rgb(10,200,255) 66%, rgb(33,129,254) 100%);*/
+			background-image: url(../static/image/NAV1.jpg);
+			background-size: 2000px 1500px;
+			background-repeat: no-repeat;
+			overflow-x: hidden;
+			transition: 0.5s;
+			padding-top: 60px;
+			text-align: center;
+		}
+
+		.sidenav a {
+			padding: 8px 8px 8px 32px;
+			text-decoration: none;
+			font-size: 30px;
+			color: rgb(38, 36, 35);
+			display: block;
+			transition: 0.3s;
+
+		}
+
+		.sidenav img {
+			border: 1px solid #ddd;
+			border-radius: 4px;
+			padding: 5px;
+		}
+
+		.sidenav a:hover {
+			color: #f1f1f1;
+		}
+
+		.sidenav .closebtn {
+			position: absolute;
+			top: 0;
+			right: 25px;
+			font-size: 36px;
+			margin-left: 50px;
+		}
+
+		@media screen and (max-height: 450px) {
+			.sidenav {
+				padding-top: 15px;
+			}
+
+			.sidenav a {
+				font-size: 18px;
+			}
+		}
+
+		/*		自定义选项卡部分*/
+		/* Style the tab */
+		div.tab {
+			overflow: hidden;
+			border: 1px solid #ccc;
+			background-color: #f1f1f1;
+		}
+
+		/* Style the buttons inside the tab */
+		div.tab button {
+			background-color: inherit;
+			float: left;
+			border: none;
+			outline: none;
+			cursor: pointer;
+			padding: 14px 16px;
+			transition: 0.3s;
+			font-size: 17px;
+		}
+
+		/* Change background color of buttons on hover */
+		div.tab button:hover {
+			background-color: #ddd;
+		}
+
+		/* Create an active/current tablink class */
+		div.tab button.active {
+			background-color: #ccc;
+		}
+
+		/* Style the tab content */
+		.tabcontent {
+			display: none;
+			padding: 6px 12px;
+			border: 1px solid #ccc;
+			border-top: none;
+		}
+
+		/*	好看的按钮部分：多重颜色和可视化处理*/
+		.button_tab {
+			border: 1px solid #ccc;
+			background-color: #f1f1f1;
+		}
+
+		.head_tab {
+			/*	border: 1px solid #ccc;*/
+			background-image: linear-gradient(to left, rgb(241, 241, 241) 13%, rgb(241, 241, 241) 33%, rgb(47, 47, 47) 100%);
+		}
+
+		.do_undo_tab {
+			height: 30px;
+			/*	border: 1px solid #ccc;*/
+			/*	background-color: #f1f1f1;*/
+			background-image: linear-gradient(to left, rgb(241, 241, 241) 13%, rgb(241, 241, 241) 33%, rgb(47, 47, 47) 100%);
+		}
+
+		.button_do {
+			background-color: 122, 122, 122;
+			border: none;
+			color: rgb(31, 31, 31);
+			padding: 0px 16px;
+			text-align: center;
+			text-decoration: none;
+			display: inline-block;
+			font-size: 16px;
+			margin: 0px 0px;
+			-webkit-transition-duration: 0.4s;
+			/* Safari */
+			transition-duration: 0.4s;
+			cursor: pointer;
+		}
+
+		.button_do:hover {
+			background-color: rgb(31, 31, 31);
+			color: #E1E0E0
+		}
+
+		div.tab button.active {
+			background-color: #ccc;
+		}
+
+		.button {
+			background-color: #4CAF50;
+			/* Green */
+			border: none;
+			color: white;
+			padding: 16px 32px;
+			text-align: center;
+			text-decoration: none;
+			display: inline-block;
+			font-size: 16px;
+			margin: 4px 2px;
+			-webkit-transition-duration: 0.4s;
+			/* Safari */
+			transition-duration: 0.4s;
+			cursor: pointer;
+		}
+
+		.button1 {
+			background-color: white;
+			color: black;
+			border: 2px solid #4CAF50;
+		}
+
+		.button1:hover {
+			background-color: #4CAF50;
+			color: white;
+		}
+
+		.button2 {
+			background-color: white;
+			color: black;
+			border: 2px solid #008CBA;
+		}
+
+		.button2:hover {
+			background-color: #008CBA;
+			color: white;
+		}
+
+		.button3 {
+			background-color: white;
+			color: black;
+			border: 2px solid #f44336;
+		}
+
+		.button3:hover {
+			background-color: #f44336;
+			color: white;
+		}
+
+		.button4 {
+			background-color: white;
+			color: black;
+			border: 2px solid #e7e7e7;
+		}
+
+		.button4:hover {
+			background-color: #e7e7e7;
+		}
+
+		.button5 {
+			background-color: white;
+			color: black;
+			border: 2px solid #555555;
+		}
+
+		.button5:hover {
+			background-color: #555555;
+			color: white;
+		}
+		.logo {
+        top:2px;
+        vertical-align: middle;
+        border-style: none;
+        max-height: 45px;
+        left:10px;
+        position: fixed;
+    }
+	</style>
+	<!--	整个网页的更换皮肤的script		-->
+	<script>
+		function changeSkin(name) {
+			var link = document.createElement("link");
+
+			link.onload = function () {
+				gantt.resetSkin();
+				gantt.render();
+			};
+			link.rel = "stylesheet";
+			link.type = "text/css";
+			link.id = "skin";
+			link.href = "../static/lib/gantt/codebase/sources/skins/dhtmlxgantt_" + name + ".css";
+			document.head.replaceChild(link, document.querySelector("#skin"));
+		}
+
+	</script>
+
+</head>
+
+<body>
+	<!--<img src="images/1.jpg" width="auto" height="auto" alt="#" class="bg bga1" id="bg1"/>-->
+	<!-- <script>
+    document.writeln("<style type=\"text/css\">");
+    document.writeln(".schmenu{z-index:999;position:absolute; height:50px; line-height:50px; background:#636871;opacity:0.9;  width:100%; margin:0 auto; overflow:hidden;}");
+    document.writeln(".schmenu ul{width:1180px; margin:0 auto; overflow:hidden;}");
+    document.writeln(".schmenu ul li{float:left;list-style:none;}");
+    document.writeln(".schmenu ul li a{height:50px; line-height:50px; display:block;color:#fff; font-size: 16px; padding: 0 10px;text-decoration: none;}");
+    document.writeln(".schmenu ul li a:hover{color:#fff; background:#000; text-decoration:none;-moz-transition:all 0.2s ease;-webkit-transition:all 0.2s ease;-o-transition:all 0.2s ease;-moz-transition:all 0.2s ease;transition:all 0.2s ease;}");
+    document.writeln("<\/style>");
+    document.writeln("<div class=\"schmenu\">");
+    document.writeln("<ul>");
+    document.writeln("<li style='float:left'><img class='logo' src='../static/image/0009.png'>");
+		
+    document.writeln("<li style='float:left'><a href=\"1.html\">返回首页<\/a><\/li>");
+    document.writeln("<li style='float:right'><a href=\"gantt.html\" target=\"_blank\">您的gantt界面<\/a><\/li>");
+    document.writeln("<li style='float:right'><a href=\"todo_list.html\" target=\"_blank\">您的todoList<\/a><\/li>");
+    document.writeln("<li style='float:right'><a href=\"tomato.html\" target=\"_blank\">您的番茄工作时钟<\/a><\/li>");
+    document.writeln("<li style='float:right'><a href=\"NewHomePage.html\">您的个人信息<\/a><\/li>");
+		
+    document.writeln("<\/ul>");
+    document.writeln("<\/div>"); -->
+</script>
+	
+	<!--	暂时无法展示背景图片？？？？-->
+
+	<!--	左面拉出全屏覆盖效果-->
+
+	<div id="mySidenav" class="sidenav">
+		<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+		<img src="../static/headpic/{{ headpic }}" alt="Paris" width="100" height="100">
+<!--		<a href={{ url_for("main.index") }}>个人主页</a-->
+		<a href="homepage.html">返回主页</a>
+		<a href="#">帮助信息</a>
+		<a href="#">gantt个性化设置</a>
+		<a href="#">联系我们</a>
+	</div>
+	<div class="head_tab">
+		<span style="font-size:30px;cursor:pointer;color: aliceblue" onclick="openNav()">&#9776; MORE</span>
+	</div>
+
+	<div class="do_undo_tab">
+		<input value="Undo" type="button" class="button_do" onclick='gantt.undo()' style='margin:5px;'>
+		<input value="Redo" type="button" class="button_do" onclick='gantt.redo()' style='margin:5px;'>
+	</div>
+
+	<div class="button_tab">
+		<button class="button button3" onclick="changeSkin('terrace')">经典</button>
+		<button class="button button2" onclick="changeSkin('skyblue')">天蓝</button>
+		<button class="button button1" onclick="changeSkin('meadow')">草场</button>
+		<button class="button button4" onclick="changeSkin('material')">质感</button>
+		<button class="button button5" onclick="changeSkin('contrast_white')">极昼</button>
+	</div>
+	<!--		<tell >choose a color</tell>-->
+
+	<div class="tab">
+		<input type='button' value='Sort by the number of holders' onclick='sortByHolders(direction)'></input>
+	</div>
+	<div class="tab">
+		<div class="filters_wrapper" id="filters_wrapper">
+			<span>Display tasks with priority:</span>
+			<label>
+				<input type="checkbox" name="Hight" checked />
+				High
+			</label>
+			<label>
+				<input type="checkbox" name="Normal" />
+				Normal
+			</label>
+			<label>
+				<input type="checkbox" name="Low" />
+				Low
+			</label>
+		</div>
+	</div>
+	<!--/****button部分******/-->
+	<!--	</div>-->
+
+	<div id="gantt_here" style="width:100%; height:100%; background-color: antiquewhite"></div>
+	<script>
+		//左边的拉开全屏窗口
+		function openNav() {
+			document.getElementById("mySidenav").style.width = "30%";
+		}
+		function closeNav() {
+			document.getElementById("mySidenav").style.width = "0";
+		}
+
+
+
+		//MESSAGE提示
+		gantt.message({
+			text: "<p>Keyboard shortcuts:</p>" +
+
+				"<b>Global</b>" +
+				"<ul>" +
+				"<li><b>Tab</b> - select gantt</li>" +
+				"<li><b>Alt + Up/Down/Left/Right</b> - scroll gantt</li>" +
+				"<li><b>Ctrl + Enter</b> - create new task</li>" +
+				"<li><b>Ctrl + Z</b> - undo</li>" +
+				"<li><b>Ctrl + R</b> - redo</li>" +
+				"</ul>" +
+				"<b>Header Cells</b>" +
+				"<ul>" +
+				"<li><b>Left/Right</b> - navigate over cells</li>" +
+				"<li><b>Home/End</b> - navigate to the first/last column</li>" +
+				"<li><b>Down</b> - navigate to task rows</li>" +
+				"<li><b>Space/Enter</b> - click header</li>" +
+				"</ul>" +
+				"<b>Task rows</b>" +
+				"<ul>" +
+				"<li><b>Up/Down</b> - navigate rows</li>" +
+				"<li><b>PageDown/PageUp</b> - navigate to the first/last task</li>" +
+				"<li><b>Space</b> - select task</li>" +
+				"<li><b>Ctrl + Enter</b> - create new task</li>" +
+				"<li><b>Delete</b> - delete selected task</li>" +
+				"<li><b>Enter</b> - open the lightbox</li>" +
+				"<li><b>Ctrl + Left/Right</b> - expand, collapse tree</li>" +
+				"</ul>",
+			expire: -1
+		});
+
+		gantt.config.date_format = "%d-%m-%Y";
+		gantt.i18n.setLocale("cn");
+		/*************************************loda_data****************************************/
+		data = eval('{{data_json|safe }}');
+		links = eval('{{links_json|safe }}');
+		var tasks = { data, links };
+
+		/*******全局变量选择性设置************************************************************************/
+		gantt.locale.labels["section_priority"] = "优先级";//这个就是lightbox里面内容的调整
+		gantt.locale.labels["section_progress"] = "项目进程";
+		gantt.locale.labels["section_parent"] = "源项目";
+		var direction = false;
+		var date_to_str = gantt.date.date_to_str(gantt.config.task_date);
+		//	gantt.locale.labels.section_priority = "Color";
+		//	gantt.locale.labels.section_textColor = "Text Color";//这两个对于颜色的处理可以之后进行个性化的选择
+
+		/*************************************全局变量选择性设置END****************************************/
+
+		/*************************************column！！！！！****************************************/
+		gantt.config.columns = [
+			{ name: "text", label: "项目名称", tree: true, width: '*' },
+			{
+				name: "priority", label: "Priority", align: "center", template: function (obj) {
+					if (obj.priority) {
+						return obj.priority;
+					}
+					return "Low";
+				}
+			},
+			{
+				name: "assigned", label: "分配人", align: "center", width: 100,
+				template: function (item) {
+					if (!item.users) return "暂无";
+					return item.users.join(", ");
+				}
+			},
+			{ name: "add", width: 40 }
+
+		];
+		/*************************************column！！END****************************************/
+
+		/*************************************LIGHTBOX！！！！！****************************************/
+		gantt.config.lightbox.sections = [
+			//描述
+			{ name: "description", height: 38, map_to: "text", type: "textarea", focus: true },
+			//优先级
+			{
+				name: "priority",
+				height: 22,
+				map_to: "priority",
+				type: "select",
+				options: [{ key: "Low", label: "低" }, { key: "Normal", label: "中" }, { key: "Hight", label: "高" }]
+			},
+			//progress
+			{
+				name: "progress", height: 22, map_to: "progress", type: "select", options: [
+					{ key: "0", label: "Not started" },
+					{ key: "0.1", label: "10%" },
+					{ key: "0.2", label: "20%" },
+					{ key: "0.3", label: "30%" },
+					{ key: "0.4", label: "40%" },
+					{ key: "0.5", label: "50%" },
+					{ key: "0.6", label: "60%" },
+					{ key: "0.7", label: "70%" },
+					{ key: "0.8", label: "80%" },
+					{ key: "0.9", label: "90%" },
+					{ key: "1", label: "Complete" }
+				]
+			},
+			//parenttask
+			{
+				name: "parent", type: "parent", allow_root: "true", root_label: "No parent", filter: function (id, task) {
+					//			if(task.$level > 1){
+					//				return false;
+					//			}else{
+					//				return true;
+					//			}
+					return true;
+				}
+			},
+
+			//时间
+			{ name: "time", type: "time", map_to: "auto", time_format: ["%d", "%m", "%Y"] }
+		];
+		/*************************************LIGHTBOX   END****************************************/
+		//前后文字部分的处理
+		gantt.templates.rightside_text = function (start, end, task) {
+			return "ID: #" + task.id;
+		};
+		gantt.templates.leftside_text = function (start, end, task) {
+			return task.duration + " days";
+		};
+
+		//这个是周末的处理,关键是对于上面部分如果是周末的话会用不用的颜色进行呈现
+		gantt.templates.scale_cell_class = function (date) {
+			if (date.getDay() == 0 || date.getDay() == 6) {
+				return "weekend";
+			}
+		};
+		gantt.templates.task_cell_class = function (item, date) {
+			if (date.getDay() == 0 || date.getDay() == 6) {
+				return "weekend";
+			}
+		};
+
+		//横着的红绿表示完成情况有关的
+		gantt.templates.grid_row_class = function (start_date, end_date, item) {
+			if (item.progress == 0) return "red";
+			if (item.progress >= 1) return "green";
+		};
+		gantt.templates.task_row_class = function (start_date, end_date, item) {
+			if (item.progress == 0) return "red";
+			if (item.progress >= 1) return "green";
+		};
+		//link颜色的处理，前端颜色和后端颜色的不一样
+		gantt.templates.link_class = function (link) {
+			var types = gantt.config.links;
+			switch (link.type) {
+				case types.finish_to_start:
+					return "finish_to_start";
+					break;
+				case types.start_to_start:
+					return "start_to_start";
+					break;
+				case types.finish_to_finish:
+					return "finish_to_finish";
+					break;
+			}
+		};
+		//gantt图的颜色效果处理，根据对应的priority选择相应的颜色
+		gantt.templates.task_class = function (start, end, task) {
+			switch (task.priority) {
+				case "Hight":
+					return "high";
+					break;
+				case "Normal":
+					return "medium";
+					break;
+				case "Low":
+					return "low";
+					break;
+			}
+		};
+		//对于progress部分的显示问题，中间条部分
+		gantt.templates.progress_text = function (start, end, task) {
+			return "<span style='text-align:left;'>" + Math.round(task.progress * 100) + "% </span>";
+		};
+		//对于根据分任务和主要任务进行分类重新排序的函数
+		function sortByHolders(direction1) {
+			direction = !direction;
+			gantt.sort(sortHolders);
+
+		}
+
+		function sortHolders(a, b) {
+			a = a.users.length;
+			b = b.users.length;
+			if (direction) {
+				return a > b ? 1 : (a < b ? -1 : 0);
+			} else {
+				return a > b ? -1 : (a < b ? 1 : 0);
+			}
+		}
+		//以下是关于内置的时间线有关
+		//	gantt.plugins({ 
+		//        marker: true 
+		//    }); 
+		var date_to_str = gantt.date.date_to_str(gantt.config.task_date);
+		var today = new Date();
+		gantt.addMarker({
+			start_date: today,
+			css: "today",
+			text: "Today",
+			title: "Today: " + date_to_str(today)
+		});
+
+		gantt.config.auto_scheduling = true;
+		gantt.config.auto_scheduling_strict = true;
+		// gantt.config.date_scale = "%F, %Y";
+		gantt.config.order_branch = true;
+		gantt.config.order_branch_free = true;
+		gantt.config.scale_height = 50;
+		gantt.config.scale_unit = "month";
+		gantt.config.subscales = [
+			{ unit: "day", step: 1, date: "%j, %D" }
+		];
+		gantt.config.work_time = true;
+		//drag between levels
+		gantt.config.order_branch = true;
+		gantt.config.order_branch_free = true;
+
+		gantt.init("gantt_here");
+		gantt.parse(tasks);
+
+		var dp = gantt.createDataProcessor({
+			url: "/api/data",
+			mode: "REST-JSON"
+		});
+	</script>
+</body><!DOCTYPE html>
+
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+	<title>gantt管理</title>
+	<link rel="icon" href="data:image/ico;base64,aWNv">
+	<script src="../static/lib/gantt/codebase/dhtmlxgantt.js"></script>
+	<script src="../static/lib/gantt/codebase/ext/dhtmlxgantt_quick_info.js"></script>
+	<script src="../static/lib/gantt/codebase/ext/dhtmlxgantt_tooltip.js"></script>
+	<script src="../static/lib/gantt/codebase/ext/dhtmlxgantt_keyboard_navigation.js"></script>
+	<script src="../static/lib/gantt/codebase/ext/dhtmlxgantt_marker.js"></script>
+	<script src="../static/lib/gantt/codebase/ext/dhtmlxgantt_undo.js"></script>
+	<link id="skin" rel="stylesheet" href="../static/lib/gantt/codebase/dhtmlxgantt.css">
+	<link rel="stylesheet" type="text/css" href="../static/lib/gantt/common/docs.css">
+	<link id="bg" rel="stylesheet" href="../static/lib/basic/css/background.css">
+	<!--	<script src="../static/gantt/codebase/common/testdata.js"></script> -->
+	
+<!--	导航栏部分-->
+<!-- <link rel="stylesheet" type="text/css" href="css/nav.css">
+<link rel="stylesheet" type="text/css" href="font/iconfont.css">
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/nav.js"></script> -->
+	
+	<style>
+		html,
+		body {
+			height: 100%;
+			padding: 0px;
+			margin: 0px;
+			overflow: hidden;
+			opacity: 0.9;
+			background: url(../static/image/HOME1.jpg);
+			background-size: cover;
+		}
+
+		.controls {
+			padding: 5px 0;
+			text-align: center;
+		}
+
+		.controls button {
+			margin: 0 10px;
+			padding: 5px;
+		}
+
+		.controlls tell {
+			align-items: flex-start;
+			margin: 0 10px;
+			padding: 5px;
+		}
+
+		/*	红线有关*/
+		.status_line {
+			background-color: #0ca30a;
+		}
+
+		.red .gantt_cell,
+		.odd.red .gantt_cell,
+		.red .gantt_task_cell,
+		.odd.red .gantt_task_cell {
+			background-color: #FDE0E0;
+		}
+
+		.green .gantt_cell,
+		.odd.green .gantt_cell,
+		.green .gantt_task_cell,
+		.odd.green .gantt_task_cell {
+			background-color: #BEE4BE;
+		}
+
+		/*		link*/
+		.gantt_task_link.start_to_start .gantt_line_wrapper div {
+			background-color: #dd5640;
+		}
+
+		.gantt_task_link.start_to_start:hover .gantt_line_wrapper div {
+			box-shadow: 0 0 5px 0px #dd5640;
+		}
+
+		.gantt_task_link.start_to_start .gantt_link_arrow_right {
+			border-left-color: #dd5640;
+		}
+
+		.gantt_task_link.finish_to_start .gantt_line_wrapper div {
+			background-color: #7576ba;
+		}
+
+		.gantt_task_link.finish_to_start:hover .gantt_line_wrapper div {
+			box-shadow: 0 0 5px 0px #7576ba;
+		}
+
+		.gantt_task_link.finish_to_start .gantt_link_arrow_right {
+			border-left-color: #7576ba;
+		}
+
+		.gantt_task_link.finish_to_finish .gantt_line_wrapper div {
+			background-color: #55d822;
+		}
+
+		.gantt_task_link.finish_to_finish:hover .gantt_line_wrapper div {
+			box-shadow: 0 0 5px 0px #55d822;
+		}
+
+		.gantt_task_link.finish_to_finish .gantt_link_arrow_left {
+			border-right-color: #55d822;
+		}
+
+		/*//tasks  另外除了下面的这几个之外我还想除了优先级之外，对于临近1ddl的完成情况这个也应当设置一个标准才行，针对于这个东西会计算不同的优先级进行提示*/
+		.high {
+			border: 2px solid #d96c49;
+			color: #d96c49;
+			background: #d96c49;
+		}
+
+		.high .gantt_task_progress {
+			background: #db2536;
+		}
+
+		.medium {
+			border: 2px solid #34c461;
+			color: #34c461;
+			background: #34c461;
+		}
+
+		.medium .gantt_task_progress {
+			background: #23964d;
+		}
+
+		.low {
+			border: 2px solid #6ba8e3;
+			color: #6ba8e3;
+			background: #6ba8e3;
+		}
+
+		.low .gantt_task_progress {
+			background: #547dab;
+		}
+
+		/*		对于周末的特殊化显示处理*/
+		.weekend {
+			background: #f4f7f4;
+		}
+
+		.gantt_selected .weekend {
+			background: #f7eb91;
+		}
+
+		/*		progress部分的显示问题*/
+		.gantt_task_progress {
+			text-align: left;
+			padding-left: 10px;
+			box-sizing: border-box;
+			color: white;
+			font-weight: bold;
+		}
+
+		/*		fillter部分，根据优先级进行筛选的按钮*/
+		.filters_wrapper {
+			line-height: 12px;
+			font-size: 12px;
+		}
+
+		.filters_wrapper span {
+			font-weight: bold;
+			padding-right: 5px;
+		}
+
+		.filters_wrapper label {
+			padding-right: 3px;
+		}
+
+		/*		slideNavigator*/
+		.sidenav {
+			height: 100%;
+			width: 0;
+			position: fixed;
+			z-index: 1;
+			top: 0;
+			left: 0;
+			/*    background-color: #111;*/
+			/*	background-image: linear-gradient(to right, rgb(0,220,255) 13%, rgb(10,200,255) 66%, rgb(33,129,254) 100%);*/
+			background-image: url(../static/image/NAV1.jpg);
+			background-size: 2000px 1500px;
+			background-repeat: no-repeat;
+			overflow-x: hidden;
+			transition: 0.5s;
+			padding-top: 60px;
+			text-align: center;
+		}
+
+		.sidenav a {
+			padding: 8px 8px 8px 32px;
+			text-decoration: none;
+			font-size: 30px;
+			color: rgb(38, 36, 35);
+			display: block;
+			transition: 0.3s;
+
+		}
+
+		.sidenav img {
+			border: 1px solid #ddd;
+			border-radius: 4px;
+			padding: 5px;
+		}
+
+		.sidenav a:hover {
+			color: #f1f1f1;
+		}
+
+		.sidenav .closebtn {
+			position: absolute;
+			top: 0;
+			right: 25px;
+			font-size: 36px;
+			margin-left: 50px;
+		}
+
+		@media screen and (max-height: 450px) {
+			.sidenav {
+				padding-top: 15px;
+			}
+
+			.sidenav a {
+				font-size: 18px;
+			}
+		}
+
+		/*		自定义选项卡部分*/
+		/* Style the tab */
+		div.tab {
+			overflow: hidden;
+			border: 1px solid #ccc;
+			background-color: #f1f1f1;
+		}
+
+		/* Style the buttons inside the tab */
+		div.tab button {
+			background-color: inherit;
+			float: left;
+			border: none;
+			outline: none;
+			cursor: pointer;
+			padding: 14px 16px;
+			transition: 0.3s;
+			font-size: 17px;
+		}
+
+		/* Change background color of buttons on hover */
+		div.tab button:hover {
+			background-color: #ddd;
+		}
+
+		/* Create an active/current tablink class */
+		div.tab button.active {
+			background-color: #ccc;
+		}
+
+		/* Style the tab content */
+		.tabcontent {
+			display: none;
+			padding: 6px 12px;
+			border: 1px solid #ccc;
+			border-top: none;
+		}
+
+		/*	好看的按钮部分：多重颜色和可视化处理*/
+		.button_tab {
+			border: 1px solid #ccc;
+			background-color: #f1f1f1;
+		}
+
+		.head_tab {
+			/*	border: 1px solid #ccc;*/
+			background-image: linear-gradient(to left, rgb(241, 241, 241) 13%, rgb(241, 241, 241) 33%, rgb(47, 47, 47) 100%);
+		}
+
+		.do_undo_tab {
+			height: 30px;
+			/*	border: 1px solid #ccc;*/
+			/*	background-color: #f1f1f1;*/
+			background-image: linear-gradient(to left, rgb(241, 241, 241) 13%, rgb(241, 241, 241) 33%, rgb(47, 47, 47) 100%);
+		}
+
+		.button_do {
+			background-color: 122, 122, 122;
+			border: none;
+			color: rgb(31, 31, 31);
+			padding: 0px 16px;
+			text-align: center;
+			text-decoration: none;
+			display: inline-block;
+			font-size: 16px;
+			margin: 0px 0px;
+			-webkit-transition-duration: 0.4s;
+			/* Safari */
+			transition-duration: 0.4s;
+			cursor: pointer;
+		}
+
+		.button_do:hover {
+			background-color: rgb(31, 31, 31);
+			color: #E1E0E0
+		}
+
+		div.tab button.active {
+			background-color: #ccc;
+		}
+
+		.button {
+			background-color: #4CAF50;
+			/* Green */
+			border: none;
+			color: white;
+			padding: 16px 32px;
+			text-align: center;
+			text-decoration: none;
+			display: inline-block;
+			font-size: 16px;
+			margin: 4px 2px;
+			-webkit-transition-duration: 0.4s;
+			/* Safari */
+			transition-duration: 0.4s;
+			cursor: pointer;
+		}
+
+		.button1 {
+			background-color: white;
+			color: black;
+			border: 2px solid #4CAF50;
+		}
+
+		.button1:hover {
+			background-color: #4CAF50;
+			color: white;
+		}
+
+		.button2 {
+			background-color: white;
+			color: black;
+			border: 2px solid #008CBA;
+		}
+
+		.button2:hover {
+			background-color: #008CBA;
+			color: white;
+		}
+
+		.button3 {
+			background-color: white;
+			color: black;
+			border: 2px solid #f44336;
+		}
+
+		.button3:hover {
+			background-color: #f44336;
+			color: white;
+		}
+
+		.button4 {
+			background-color: white;
+			color: black;
+			border: 2px solid #e7e7e7;
+		}
+
+		.button4:hover {
+			background-color: #e7e7e7;
+		}
+
+		.button5 {
+			background-color: white;
+			color: black;
+			border: 2px solid #555555;
+		}
+
+		.button5:hover {
+			background-color: #555555;
+			color: white;
+		}
+		.logo {
+        top:2px;
+        vertical-align: middle;
+        border-style: none;
+        max-height: 45px;
+        left:10px;
+        position: fixed;
+    }
+	</style>
+	<!--	整个网页的更换皮肤的script		-->
+	<script>
+		function changeSkin(name) {
+			var link = document.createElement("link");
+
+			link.onload = function () {
+				gantt.resetSkin();
+				gantt.render();
+			};
+			link.rel = "stylesheet";
+			link.type = "text/css";
+			link.id = "skin";
+			link.href = "../static/lib/gantt/codebase/skins/dhtmlxgantt_" + name + ".css";
+			document.head.replaceChild(link, document.querySelector("#skin"));
+		}
+
+	</script>
+
+</head>
+
+<body>
+	<!--<img src="images/1.jpg" width="auto" height="auto" alt="#" class="bg bga1" id="bg1"/>-->
+	<!-- <script>
+    document.writeln("<style type=\"text/css\">");
+    document.writeln(".schmenu{z-index:999;position:absolute; height:50px; line-height:50px; background:#636871;opacity:0.9;  width:100%; margin:0 auto; overflow:hidden;}");
+    document.writeln(".schmenu ul{width:1180px; margin:0 auto; overflow:hidden;}");
+    document.writeln(".schmenu ul li{float:left;list-style:none;}");
+    document.writeln(".schmenu ul li a{height:50px; line-height:50px; display:block;color:#fff; font-size: 16px; padding: 0 10px;text-decoration: none;}");
+    document.writeln(".schmenu ul li a:hover{color:#fff; background:#000; text-decoration:none;-moz-transition:all 0.2s ease;-webkit-transition:all 0.2s ease;-o-transition:all 0.2s ease;-moz-transition:all 0.2s ease;transition:all 0.2s ease;}");
+    document.writeln("<\/style>");
+    document.writeln("<div class=\"schmenu\">");
+    document.writeln("<ul>");
+    document.writeln("<li style='float:left'><img class='logo' src='../static/image/0009.png'>");
+		
+    document.writeln("<li style='float:left'><a href=\"1.html\">返回首页<\/a><\/li>");
+    document.writeln("<li style='float:right'><a href=\"gantt.html\" target=\"_blank\">您的gantt界面<\/a><\/li>");
+    document.writeln("<li style='float:right'><a href=\"todo_list.html\" target=\"_blank\">您的todoList<\/a><\/li>");
+    document.writeln("<li style='float:right'><a href=\"tomato.html\" target=\"_blank\">您的番茄工作时钟<\/a><\/li>");
+    document.writeln("<li style='float:right'><a href=\"NewHomePage.html\">您的个人信息<\/a><\/li>");
+		
+    document.writeln("<\/ul>");
+    document.writeln("<\/div>"); -->
+</script>
+	
+	<!--	暂时无法展示背景图片？？？？-->
+
+	<!--	左面拉出全屏覆盖效果-->
+
+	<div id="mySidenav" class="sidenav">
+		<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+		<img src="../static/headpic/{{ headpic }}" alt="Paris" width="100" height="100">
+<!--		<a href={{ url_for("main.index") }}>个人主页</a-->
+		<a href="1.html">个人主页</a>
+		<a href="#">帮助信息</a>
+		<a href="#">gantt个性化设置</a>
+		<a href="#">联系我们</a>
+	</div>
+	<div class="head_tab">
+		<span style="font-size:30px;cursor:pointer;color: aliceblue" onclick="openNav()">&#9776; MORE</span>
+	</div>
+
+	<div class="do_undo_tab">
+		<input value="Undo" type="button" class="button_do" onclick='gantt.undo()' style='margin:5px;'>
+		<input value="Redo" type="button" class="button_do" onclick='gantt.redo()' style='margin:5px;'>
+	</div>
+
+	<div class="button_tab">
+		<button class="button button3" onclick="changeSkin('terrace')">经典</button>
+		<button class="button button2" onclick="changeSkin('skyblue')">天蓝</button>
+		<button class="button button1" onclick="changeSkin('meadow')">草场</button>
+		<button class="button button2" onclick="changeSkin('broadway')">有问题</button>
+		<button class="button button4" onclick="changeSkin('material')">质感</button>
+		<button class="button button5" onclick="changeSkin('contrast_white')">极昼</button>
+	</div>
+	<!--		<tell >choose a color</tell>-->
+
+	<div class="tab">
+		<input type='button' value='Sort by the number of holders' onclick='sortByHolders(direction)'></input>
+	</div>
+	<div class="tab">
+		<div class="filters_wrapper" id="filters_wrapper">
+			<span>Display tasks with priority:</span>
+			<label>
+				<input type="checkbox" name="Hight" checked />
+				High
+			</label>
+			<label>
+				<input type="checkbox" name="Normal" />
+				Normal
+			</label>
+			<label>
+				<input type="checkbox" name="Low" />
+				Low
+			</label>
+		</div>
+	</div>
+	<!--/****button部分******/-->
+	<!--	</div>-->
+
+	<div id="gantt_here" style="width:100%; height:100%; background-color: antiquewhite"></div>
+	<script>
+		//左边的拉开全屏窗口
+		function openNav() {
+			document.getElementById("mySidenav").style.width = "30%";
+		}
+		function closeNav() {
+			document.getElementById("mySidenav").style.width = "0";
+		}
+
+
+
+		//MESSAGE提示
+		gantt.message({
+			text: "<p>Keyboard shortcuts:</p>" +
+
+				"<b>Global</b>" +
+				"<ul>" +
+				"<li><b>Tab</b> - select gantt</li>" +
+				"<li><b>Alt + Up/Down/Left/Right</b> - scroll gantt</li>" +
+				"<li><b>Ctrl + Enter</b> - create new task</li>" +
+				"<li><b>Ctrl + Z</b> - undo</li>" +
+				"<li><b>Ctrl + R</b> - redo</li>" +
+				"</ul>" +
+				"<b>Header Cells</b>" +
+				"<ul>" +
+				"<li><b>Left/Right</b> - navigate over cells</li>" +
+				"<li><b>Home/End</b> - navigate to the first/last column</li>" +
+				"<li><b>Down</b> - navigate to task rows</li>" +
+				"<li><b>Space/Enter</b> - click header</li>" +
+				"</ul>" +
+				"<b>Task rows</b>" +
+				"<ul>" +
+				"<li><b>Up/Down</b> - navigate rows</li>" +
+				"<li><b>PageDown/PageUp</b> - navigate to the first/last task</li>" +
+				"<li><b>Space</b> - select task</li>" +
+				"<li><b>Ctrl + Enter</b> - create new task</li>" +
+				"<li><b>Delete</b> - delete selected task</li>" +
+				"<li><b>Enter</b> - open the lightbox</li>" +
+				"<li><b>Ctrl + Left/Right</b> - expand, collapse tree</li>" +
+				"</ul>",
+			expire: -1
+		});
+
+		gantt.config.date_format = "%d-%m-%Y";
+		gantt.i18n.setLocale("cn");
+		/*************************************loda_data****************************************/
+		data = eval('{{data_json|safe }}');
+		links = eval('{{links_json|safe }}');
+		var tasks = { data, links };
+
+		/*******全局变量选择性设置************************************************************************/
+		gantt.locale.labels["section_priority"] = "优先级";//这个就是lightbox里面内容的调整
+		gantt.locale.labels["section_progress"] = "项目进程";
+		gantt.locale.labels["section_parent"] = "源项目";
+		var direction = false;
+		var date_to_str = gantt.date.date_to_str(gantt.config.task_date);
+		//	gantt.locale.labels.section_priority = "Color";
+		//	gantt.locale.labels.section_textColor = "Text Color";//这两个对于颜色的处理可以之后进行个性化的选择
+
+		/*************************************全局变量选择性设置END****************************************/
+
+		/*************************************column！！！！！****************************************/
+		gantt.config.columns = [
+			{ name: "text", label: "项目名称", tree: true, width: '*' },
+			{
+				name: "priority", label: "Priority", align: "center", template: function (obj) {
+					if (obj.priority) {
+						return obj.priority;
+					}
+					return "Low";
+				}
+			},
+			{
+				name: "assigned", label: "分配人", align: "center", width: 100,
+				template: function (item) {
+					if (!item.users) return "暂无";
+					return item.users.join(", ");
+				}
+			},
+			{ name: "add", width: 40 }
+
+		];
+		/*************************************column！！END****************************************/
+
+		/*************************************LIGHTBOX！！！！！****************************************/
+		gantt.config.lightbox.sections = [
+			//描述
+			{ name: "description", height: 38, map_to: "text", type: "textarea", focus: true },
+			//优先级
+			{
+				name: "priority",
+				height: 22,
+				map_to: "priority",
+				type: "select",
+				options: [{ key: "Low", label: "低" }, { key: "Normal", label: "中" }, { key: "Hight", label: "高" }]
+			},
+			//progress
+			{
+				name: "progress", height: 22, map_to: "progress", type: "select", options: [
+					{ key: "0", label: "Not started" },
+					{ key: "0.1", label: "10%" },
+					{ key: "0.2", label: "20%" },
+					{ key: "0.3", label: "30%" },
+					{ key: "0.4", label: "40%" },
+					{ key: "0.5", label: "50%" },
+					{ key: "0.6", label: "60%" },
+					{ key: "0.7", label: "70%" },
+					{ key: "0.8", label: "80%" },
+					{ key: "0.9", label: "90%" },
+					{ key: "1", label: "Complete" }
+				]
+			},
+			//parenttask
+			{
+				name: "parent", type: "parent", allow_root: "true", root_label: "No parent", filter: function (id, task) {
+					//			if(task.$level > 1){
+					//				return false;
+					//			}else{
+					//				return true;
+					//			}
+					return true;
+				}
+			},
+
+			//时间
+			{ name: "time", type: "time", map_to: "auto", time_format: ["%d", "%m", "%Y"] }
+		];
+		/*************************************LIGHTBOX   END****************************************/
+		//前后文字部分的处理
+		gantt.templates.rightside_text = function (start, end, task) {
+			return "ID: #" + task.id;
+		};
+		gantt.templates.leftside_text = function (start, end, task) {
+			return task.duration + " days";
+		};
+
+		//这个是周末的处理,关键是对于上面部分如果是周末的话会用不用的颜色进行呈现
+		gantt.templates.scale_cell_class = function (date) {
+			if (date.getDay() == 0 || date.getDay() == 6) {
+				return "weekend";
+			}
+		};
+		gantt.templates.task_cell_class = function (item, date) {
+			if (date.getDay() == 0 || date.getDay() == 6) {
+				return "weekend";
+			}
+		};
+
+		//横着的红绿表示完成情况有关的
+		gantt.templates.grid_row_class = function (start_date, end_date, item) {
+			if (item.progress == 0) return "red";
+			if (item.progress >= 1) return "green";
+		};
+		gantt.templates.task_row_class = function (start_date, end_date, item) {
+			if (item.progress == 0) return "red";
+			if (item.progress >= 1) return "green";
+		};
+		//link颜色的处理，前端颜色和后端颜色的不一样
+		gantt.templates.link_class = function (link) {
+			var types = gantt.config.links;
+			switch (link.type) {
+				case types.finish_to_start:
+					return "finish_to_start";
+					break;
+				case types.start_to_start:
+					return "start_to_start";
+					break;
+				case types.finish_to_finish:
+					return "finish_to_finish";
+					break;
+			}
+		};
+		//gantt图的颜色效果处理，根据对应的priority选择相应的颜色
+		gantt.templates.task_class = function (start, end, task) {
+			switch (task.priority) {
+				case "Hight":
+					return "high";
+					break;
+				case "Normal":
+					return "medium";
+					break;
+				case "Low":
+					return "low";
+					break;
+			}
+		};
+		//对于progress部分的显示问题，中间条部分
+		gantt.templates.progress_text = function (start, end, task) {
+			return "<span style='text-align:left;'>" + Math.round(task.progress * 100) + "% </span>";
+		};
+		//对于根据分任务和主要任务进行分类重新排序的函数
+		function sortByHolders(direction1) {
+			direction = !direction;
+			gantt.sort(sortHolders);
+
+		}
+
+		function sortHolders(a, b) {
+			a = a.users.length;
+			b = b.users.length;
+			if (direction) {
+				return a > b ? 1 : (a < b ? -1 : 0);
+			} else {
+				return a > b ? -1 : (a < b ? 1 : 0);
+			}
+		}
+		//以下是关于内置的时间线有关
+		//	gantt.plugins({ 
+		//        marker: true 
+		//    }); 
+		var date_to_str = gantt.date.date_to_str(gantt.config.task_date);
+		var today = new Date();
+		gantt.addMarker({
+			start_date: today,
+			css: "today",
+			text: "Today",
+			title: "Today: " + date_to_str(today)
+		});
+
+		gantt.config.auto_scheduling = true;
+		gantt.config.auto_scheduling_strict = true;
+		// gantt.config.date_scale = "%F, %Y";
+		gantt.config.order_branch = true;
+		gantt.config.order_branch_free = true;
+		gantt.config.scale_height = 50;
+		gantt.config.scale_unit = "month";
+		gantt.config.subscales = [
+			{ unit: "day", step: 1, date: "%j, %D" }
+		];
+		gantt.config.work_time = true;
+		//drag between levels
+		gantt.config.order_branch = true;
+		gantt.config.order_branch_free = true;
+
+		gantt.init("gantt_here");
+		gantt.parse(tasks);
+
+		var dp = gantt.createDataProcessor({
+			url: "/api/data",
+			mode: "REST-JSON"
+		});
+	</script>
+</body>

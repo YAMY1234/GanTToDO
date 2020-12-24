@@ -1,0 +1,231 @@
+* {
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body {
+/*  background: linear-gradient(#f6d365, #ffa991);*/
+	background-image: url(../../image/HOME1.jpg);
+	background-size: cover;
+  color: #fff;
+  font-family: sans-serif;
+  min-height: 100vh;
+}
+
+header {
+  min-height: 20vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin: 0 5px;
+}
+
+.github-corner svg:hover, .github-corner:focus svg {
+  fill: #e68f78 !important;
+}
+
+.github-corner:hover .octo-arm, .github-corner:focus .octo-arm {
+  animation: octocat-wave 560ms ease-in-out;
+}
+
+@keyframes octocat-wave {
+  0%,
+  100% {
+    transform: rotate(0);
+  }
+  20%,
+  60% {
+    transform: rotate(-25deg);
+  }
+  40%,
+  80% {
+    transform: rotate(10deg);
+  }
+}
+
+a {
+  color: white;
+}
+
+a:hover {
+  color: #885345;
+}
+
+button {
+  color: #ffa991;
+  background: #fff;
+  cursor: pointer;
+}
+
+button:hover,
+button:focus {
+  background: #ffa991;
+  color: #fff;
+}
+
+form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+form input,
+form button {
+  padding: 0.5rem;
+  font-size: 1.5rem;
+  background: #fff;
+  outline: none;
+  border: none;
+  transition: all 0.3s ease;
+}
+
+form input {
+  border-radius: 10px 0 0 10px;
+  width: 300px;
+}
+
+form input:focus {
+  background: #f5f5f5;
+}
+
+form button {
+  border-radius: 0 10px 10px 0;
+}
+
+.buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 10vh;
+  width: fit-content;
+  margin: 0 auto;
+}
+
+.buttons button {
+  border: none;
+  outline: none;
+  margin: 3px;
+  border-radius: 10%;
+}
+
+.todo-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+/*
+	float:right;
+	  justify-content: right;
+  align-items: right;
+*/
+}
+
+.todo-message {
+  text-align: center;
+}
+
+.todo-list {
+  min-width: 50%;
+  list-style: none;
+  padding: 0;
+}
+
+.todo-item {
+  margin: 0 0.5rem 0.5rem 0.5rem;
+  padding: 0.2rem;
+  background: #fff;
+  color: #000;
+  font-size: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.3s ease;
+  border-radius: 5px;
+}
+
+.todo-item span {
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.todo-item-left {
+  display: flex;
+  align-items: center;
+}
+
+.todo-item p, .todo-item span {
+  margin: 6px;
+/*	4*/
+}
+
+.todo-item p {
+  text-decoration: line-through transparent;
+  cursor: pointer;
+  transition: color 0.3s, text-decoration-color 0.7s;
+}
+
+.todo-item p.completed {
+  color: #6e6e6e;
+  text-decoration-color: #6e6e6e;
+}
+
+.todo-item .delete:hover {
+  color: #d31f1f;
+}
+
+.todo-enter-active {
+  transition: all 0.5s cubic-bezier(0.415, 0.1, 0.37, 1.355);
+}
+
+.todo-leave-active {
+  transition: all 0.2s;
+  position: absolute;
+}
+
+.todo-enter,
+.todo-leave-to {
+  transform: translateY(30px);
+  opacity: 0;
+}
+
+@media (max-width: 769px) {
+  .todo-list {
+    min-width: 70%;
+  }
+}
+
+@media (max-width: 500px) {
+  .github-corner:hover .octo-arm {
+    animation: none;
+  }
+  .github-corner .octo-arm {
+    animation: octocat-wave 560ms ease-in-out;
+  }
+  form {
+    width: 90%;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 426px) {
+  .todo-list {
+    width: 100%;
+  }
+}
+
+.help {
+  position: fixed;
+  top: 0;
+  left: 0;
+  padding: 1px;
+  margin: 1px;
+  cursor: pointer;
+  font-size: 36px;
+  color: #ffffffa1;
+}
+
+.introjs-tooltip {
+  color: black;
+}

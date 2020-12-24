@@ -1,0 +1,127 @@
+@charset "utf-8";
+/* CSS Document */
+ul{list-style:none}
+a{color:#000;
+text-decoration:none;
+}
+/*设置背景图片全屏居中显示*/
+img.bg{
+	 min-height: 100%;
+            min-width: 1024px;
+            width: 100%;
+            height: auto !important;
+            height: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index:-1;}
+.nav{position:relative;right: 500px; top:300px;height:50px;margin:250px auto;}/*调整位置在这里调*/
+/*预览块样式*/
+
+.nav ul li {
+	
+	float:left;
+	width:65px;
+	height:60px;
+	background-color:#0FF;
+	margin-right:25px;
+	z-index:777;
+	border-radius: 10px;
+	zoom:1;
+}
+.nav ul li p {
+	position:relative;
+	left:10px;
+	bottom:70px;
+	
+}
+/*设置不同的列表色*/
+.nav ul li:nth-of-type(1){
+	background-color:rgba(239,130,160,0.4);}
+.nav ul li:nth-of-type(2){
+	background-color:rgba(36,134,185,0.4);}
+.nav ul li:nth-of-type(3){
+	background-color:rgba(137,145,107,0.8);}
+.nav ul li:nth-of-type(4){
+	background-color:rgba(153,153,153,0.80);}
+.nav ul li:nth-of-type(5){
+	background-color:rgba(218,201,166,0.8);}				
+/*缩略图样式*/
+.nav ul li a::after{
+	content:"";
+	width:50px;
+	height:50px;
+	display: block;
+	position: relative;
+	bottom:160px;left:7px;
+	border:#FFF solid 1px;
+	border-radius: 50%;
+	z-index:888;
+}
+/*缩略图图片*/
+.nav ul li:nth-of-type(1) a::after{
+	background:url(static/image/1.jpg) no-repeat center;background-size: 50px 50px;}
+.nav ul li:nth-of-type(2) a::after{
+	background:url(static/image/2.jpg) no-repeat center;background-size: 50px 50px;}
+.nav ul li:nth-of-type(3) a::after{
+	background:url(static/image/3.jpg) no-repeat center;background-size: 50px 50px;}
+.nav ul li:nth-of-type(4) a::after{
+	background:url(static/image/4.jpg) no-repeat center;background-size: 50px 50px;}
+.nav ul li:nth-of-type(5) a::after{
+	background:url(static//image/5.jpg) no-repeat center; background-size: 50px 50px;}
+/*设置缩略图遮罩层*/	
+.nav ul li a::before{
+	content:"";
+	width:50px;
+	height:50px;
+	display: block;
+	position: relative;
+	background: rgba(0,0,0,0.3);
+	bottom:40px;left:7px;
+	border:#FFF solid 1px;
+	border-radius: 50%;
+	z-index:99999;
+}				
+.nav ul li a:hover::before{
+	background: rgba(0,0,0,0);
+}
+/*背景图片切换*/
+.bga1:target{
+	z-index:-1;
+	}
+.bga2:target{
+	z-index:-1;
+	}
+.bga3:target{
+	z-index:-1;
+	}	
+.bga4:target{
+	z-index:-1;
+	}
+.bga5:target{
+	z-index:-1;
+	}
+/*设置其他图片隐藏*/
+.bg:not(:target){
+	z-index:-100;
+}
+
+/* 淡出动画 */
+.fade {
+  -webkit-animation-name: fade;
+  -webkit-animation-duration: 3.0s;
+  animation-name: fade;
+  animation-duration: 3.0s;
+}
+
+@-webkit-keyframes fade {
+  from {opacity: .4} 
+  to {opacity: 1}
+}
+
+@keyframes fade {
+  from {opacity: .4} 
+  to {opacity: 1}
+}
+
+

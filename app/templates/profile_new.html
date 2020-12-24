@@ -1,0 +1,219 @@
+<!--templates/profile.html-->
+<head>
+<title>个人信息页面</title>
+<link rel="icon" href="data:image/ico;base64,aWNv">
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Dmego Home">
+<meta name="keywords" content="Dmego,Homepage">
+<meta name="author" content="Dmego">
+<link rel='stylesheet' type='text/css' href='https://cdn.webfont.youziku.com/webfonts/nomal/123918/33195/5d21f88af629d8080c5960eb.css' />
+<link rel="stylesheet" type="text/css" href="../static/lib/self_card/assets/css/vno.css">
+<link rel="stylesheet" type="text/css" href="../static/lib/self_card/assets/css/iconfont.css">
+</head>
+
+<script type="text/javascript">
+  function fileChange(target) {
+      var filemaxsize = 1024 * 1;//2M   
+
+      var fileSize = target.files[0].size;
+
+      var size = fileSize / 1024;
+      if (size > filemaxsize) {
+          alert("图片大小不能大于" + filemaxsize / 1024 + "M！");
+          target.value = "";
+          return false;
+      }
+  }   
+</script>
+
+<body style='background-color:rgba(165, 170, 181, 0.5); background-size: 100% 100%;'></body>
+
+<header id="panel" class="panel-cover" style="margin-top: -20px;z-index:1;left:50%;transform: translate(-50%, 0);">
+  <div class="panel-main">
+      <div class="panel-main__inner panel-inverted">
+          <div class="panel-main__content" style="margin-top: -20px;">
+              <div class="ih-item circle effect right_to_left">            
+                <a href={{ url_for("main.profile") }} class="blog-button">
+
+                      <div class="img">
+                        <img src="../static/headpic/{{ headpic }}" alt="img" class="js-avatar iUp profilepic">
+                      </div>
+
+                      <div class="info iUp">
+                          <div class="info-back">
+                              <h2 style="font-family:AlegreyaSans-BoldItalic;"> 
+                                  
+                                      Fighting
+                                  
+                              </h2>
+                              <br><br>
+                              <p style="font-weight:bold;font-style:normal">
+                                  
+                                      努力
+                                  
+                              </p>
+                          </div>
+                      </div>
+                  </a>
+              </div>
+
+              <!-- <a href="#" title="Dmego Home" class="profilepic">
+                  <img src="./img/logo2.jpg" width="80" alt="Dmego`s logo" class="js-avatar iUp show" />
+              </a> -->
+              <h1 class="panel-cover__title panel-title iUp">
+                  <a>{{ name }}</a>
+              </h1>
+              <p class="panel-cover__subtitle panel-subtitle iUp">Schedule Your Life</p>
+              <hr class="panel-cover__divider iUp" />
+              <p id="description" class="panel-cover__description iUp">如何得与凉风约，不共尘沙一并来!
+                  <br/>
+                  <strong>-「中牟道中」</strong>
+              </p>
+              <div class="navigation-wrapper iUp">
+                  <div>
+                      <nav class="cover-navigation cover-navigation--primary">
+                          <ul class="navigation">
+                              <li class="navigation__item">
+                                  <a href="#" class="blog-button" data-toggle="modal" data-target="#myModal1">更换头像</a>
+                              </li>
+                              <li class="navigation__item">
+                                  <a href="#" class="blog-button" data-toggle="modal" data-target="#myModal2">修改昵称</a>
+                              </li>
+                              <li class="navigation__item">
+                                  <a href="#" class="blog-button" data-toggle="modal" data-target="#myModal3">修改密码</a>
+                              </li>
+                          </ul>
+                      </nav>
+                  </div>
+                  
+              </div>
+          </div>
+      </div>
+      <div class="panel-cover--overlay cover-slate"></div>
+  </div>
+  <!-- <div class="beian iUp">
+      <a class="icp" href="http://www.miitbeian.gov.cn/publish/query/indexFirst.action" target="_blank">XXX</a>
+      <a class="gwab" href="http://www.beian.gov.cn/portal/recordQuery" target="_blank">XXX</a>
+  </div> -->
+
+</header>
+
+  <!-- 模态框（Modal） -->
+  <form action={{ url_for("auth.edit_headpic") }} enctype='multipart/form-data' method="POST" >
+    <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+              &times;
+            </button>
+            <h4 class="modal-title" id="myModalLabel">
+              更换头像
+            </h4>
+          </div>
+          <div class="modal-body">
+            <input type="file" name="file" onchange="fileChange(this);" />
+              <br>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-primary" onchange="fileChange(this);" style="color:#fff">
+              提交更改
+            </button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal -->
+    </div>
+  </form>
+
+
+  <!-- 模态框（Modal） -->
+  <form id=un action={{ url_for('auth.edit_name') }} method="POST" >
+    <div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+              &times;
+            </button>
+            <h4 class="modal-title" id="myModalLabel">
+              修改昵称
+            </h4>
+          </div>
+          <div class="modal-body">
+              <input type="text" name="username" id="un">
+              <br>
+          </div>
+          <div class="modal-footer">
+            <button onclick="$('#un').submit();" class="btn btn-primary" style="color:#fff">
+              提交更改
+            </button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal -->
+    </div>
+  </form>
+
+
+  <!-- 模态框（Modal） -->
+  <form id=un1 action={{ url_for('auth.edit_password') }} method="POST" >
+    <div class="modal fade" id="myModal3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+              &times;
+            </button>
+            <h4 class="modal-title" id="myModalLabel">
+              修改密码
+            </h4>
+          </div>
+          <div class="modal-body">
+            <form method="POST" >
+              原密码&nbsp&nbsp
+              <input type="password" name="password">
+              <br>
+              <br>
+              新密码&nbsp&nbsp
+              <input type="password" name="NEWpassword" />
+              <br>
+              <br>
+              确认新密码&nbsp&nbsp
+              <input type="password" name="VALIDNEWpassword" />
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button onclick="$('#un1').submit();" class="btn btn-primary" style="color:#fff">
+              提交更改
+            </button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal -->
+    </div>
+  </form>
+  <br><br><br>
+  <script type="text/javascript" src="../static/lib/basic/js/jquery.min.js"></script>
+  <script type="text/javascript" src="../static/lib/self_card/assets/js/fetch.min.js"></script>
+  <script type="text/javascript" src="../static/lib/basic/js/main.js"></script>
+</body>
+<br><br><br><br>
+<style>
+    .ft{
+      background-color: #f8f9faa2!important;
+      z-index:99;
+      padding-top: 0rem!important;
+      padding-bottom: 0rem!important;
+      /* text-align:center;
+      bottom:0px;
+      left:50%;
+      transform: translateX(-50%); 
+      position:absolute;
+        z-index:2;
+        
+        padding-bottom: 0px!important;
+        padding-top:0px!important;
+        width:100%;
+        margin:0 0; */
+    }
+</style>

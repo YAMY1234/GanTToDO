@@ -1,0 +1,368 @@
+<html >
+  <head>
+    <meta charset="UTF-8">
+    <title>主页</title>
+    
+  <!--	导航栏部分-->
+  <!-- <link rel="stylesheet" type="text/css" href="css/nav.css">
+  <link rel="stylesheet" type="text/css" href="font/iconfont.css">
+  
+  <script type="text/javascript" src="js/jquery.min.js"></script>
+  <script type="text/javascript" src="js/nav.js"></script> -->
+  <!--	导航栏结束-->
+    <style>
+      *, *:before, *:after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  body {
+    overflow: hidden;
+    font-family: 'Oswald', sans-serif;
+      text-transform: uppercase;
+  }
+  .slider {
+    position: relative;
+    height: 100vh;
+  }
+  .slider__slides {
+    z-index: 1;
+    position: relative;
+    height: 100%;
+  }
+  .slider__control {
+    z-index: 2;
+    position: absolute;
+    top: 50%;
+    left: 40%;
+    width: 60px;
+    height: 60px;
+    margin-left: -30px;
+    margin-top: -30px;
+    border-radius: 50%;
+    background: #fff;
+    -webkit-transition: background-color 0.3s;
+    transition: background-color 0.3s;
+    cursor: pointer;
+  }
+  .slider__control--right {
+    left: 95%;
+  }
+  .slider__control:hover {
+    background-color: #2da6ff;
+  }
+  .slider__control-line {
+    position: absolute;
+    left: 23px;
+    top: 50%;
+    width: 3px;
+    height: 14px;
+    -webkit-transform-origin: 50% 0;
+            transform-origin: 50% 0;
+    -webkit-transform: rotate(-45deg);
+            transform: rotate(-45deg);
+  }
+  .slider__control-line:nth-child(2) {
+    -webkit-transform: translateY(1px) rotate(-135deg);
+            transform: translateY(1px) rotate(-135deg);
+  }
+  .slider__control--right .slider__control-line {
+    left: 37px;
+    -webkit-transform-origin: 1px 0;
+            transform-origin: 1px 0;
+    -webkit-transform: rotate(45deg);
+            transform: rotate(45deg);
+  }
+  .slider__control--right .slider__control-line:nth-child(2) {
+    -webkit-transform: translateY(1px) rotate(135deg);
+            transform: translateY(1px) rotate(135deg);
+  }
+  .slider__control-line:after {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #e2e2e2;
+    -webkit-transition: background-color 0.3s;
+    transition: background-color 0.3s;
+  }
+  .slider__control:hover .slider__control-line:after {
+    background-color: #fff;
+  }
+  .slider__control.a--rotation .slider__control-line:after {
+    -webkit-animation: arrowLineRotation 0.49s;
+            animation: arrowLineRotation 0.49s;
+  }
+  .slider__control.a--rotation .slider__control-line:nth-child(1):after {
+    -webkit-animation: arrowLineRotationRev 0.49s;
+            animation: arrowLineRotationRev 0.49s;
+  }
+  @-webkit-keyframes arrowLineRotation {
+    to {
+      -webkit-transform: rotate(180deg);
+              transform: rotate(180deg);
+    }
+  }
+  @keyframes arrowLineRotation {
+    to {
+      -webkit-transform: rotate(180deg);
+              transform: rotate(180deg);
+    }
+  }
+  @-webkit-keyframes arrowLineRotationRev {
+    to {
+      -webkit-transform: rotate(-180deg);
+              transform: rotate(-180deg);
+    }
+  }
+  @keyframes arrowLineRotationRev {
+    to {
+      -webkit-transform: rotate(-180deg);
+              transform: rotate(-180deg);
+    }
+  }
+  .slide {
+    overflow: hidden;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 150vmax;
+    height: 150vmax;
+    -webkit-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+    border-radius: 50%;
+    -webkit-transition: -webkit-clip-path 0s 0.91s;
+    transition: -webkit-clip-path 0s 0.91s;
+    transition: clip-path 0s 0.91s;
+    transition: clip-path 0s 0.91s, -webkit-clip-path 0s 0.91s;
+    -webkit-clip-path: circle(30px at 120vw 50%);
+            clip-path: circle(30px at 120vw 50%);
+  }
+  .slide.s--prev {
+    -webkit-clip-path: circle(30px at 30vw 50%);
+            clip-path: circle(30px at 30vw 50%);
+  }
+  .slide.s--active {
+    z-index: 1;
+    -webkit-transition: -webkit-clip-path 1.3s;
+    transition: -webkit-clip-path 1.3s;
+    transition: clip-path 1.3s;
+    transition: clip-path 1.3s, -webkit-clip-path 1.3s;
+    -webkit-clip-path: circle(120vmax at 120vw 50%);
+            clip-path: circle(120vmax at 120vw 50%);
+  }
+  .slide.s--active.s--active-prev {
+    -webkit-clip-path: circle(120vmax at 30vw 50%);
+            clip-path: circle(120vmax at 30vw 50%);
+  }
+  .slide:nth-child(1) .slide__inner {
+  /*  background-image: url(blue-2564660_1920.jpg);*/
+    background-image: url(../static/image/1.png);
+  }
+  .slide:nth-child(2) .slide__inner {
+  /*  background-image: url(blue-bricks-door-845242.jpg);*/
+    background-image: url(../static/image/2.jpg);
+  }
+  .slide:nth-child(3) .slide__inner {
+  /*  background-image: url(cody-davis-253928-unsplash.jpg);*/
+    background-image: url(../static/image/2.png);
+  }
+  .slide:nth-child(4) .slide__inner {
+  /*  background-image: url(pinguin-1920x1080-snow-ocean-cute-animals-funny-4457.jpg);*/
+    background-image: url(../static/image/4.jpg);
+  }
+  .slide:nth-child(5) .slide__inner {
+  /*  background-image: url(vincent-giersch-100507-unsplash.jpg);*/
+    background-image: url(../static/image/3.jpg);
+  }
+  .slide__inner {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 100vw;
+    height: 100vh;
+    margin-left: -50vw;
+    margin-top: -50vh;
+    background-size: cover;
+    background-position: center center;
+  }
+  .slide__inner:before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+     
+  }
+  .slide__content {
+    position: absolute;
+    left: 5%;
+    top: 50%;
+    margin-left: -30px;
+    margin-top: 48px;
+    max-width: 480px;
+    color: #fff;
+  }
+  .slide__heading {
+    margin-bottom: 20px;
+    font-size: 60px;
+  }
+  .slide__text {
+    font-size: 25px;
+  }
+  .slide__text a {
+    color: inherit;
+  }
+      </style>
+     
+  </head>
+  <body>
+    
+  <!--	导航栏部分-->
+  <script>
+      document.writeln("<style type=\"text/css\">");
+      document.writeln(".schmenu{z-index:999;position:absolute; height:50px; line-height:50px; background:#636871;opacity:0.9;  width:100%; margin:0 auto; overflow:hidden;}");
+      document.writeln(".schmenu ul{width:1180px; margin:0 auto; overflow:hidden;}");
+      document.writeln(".schmenu ul li{float:left;list-style:none;}");
+      document.writeln(".schmenu ul li a{height:50px; line-height:50px; display:block;color:#fff; font-size: 16px; padding: 0 10px;text-decoration: none;}");
+      document.writeln(".schmenu ul li a:hover{color:#fff; background:#000; text-decoration:none;-moz-transition:all 0.2s ease;-webkit-transition:all 0.2s ease;-o-transition:all 0.2s ease;-moz-transition:all 0.2s ease;transition:all 0.2s ease;}");
+      document.writeln("<\/style>");
+      document.writeln("<div class=\"schmenu\">");
+      document.writeln("<ul>");
+      document.writeln("<li style='float:left'><a href=\"#\">返回首页<\/a><\/li>");
+      document.writeln("<li style='float:right'><a href=\"/gantt\" target=\"_blank\">gantt界面<\/a><\/li>");
+      document.writeln("<li style='float:right'><a href=\"todo_list.html\" target=\"_blank\">todoList<\/a><\/li>");
+      document.writeln("<li style='float:right'><a href=\"toclock.html\" target=\"_blank\">番茄工作时钟<\/a><\/li>");
+      document.writeln("<li style='float:right'><a href=\"#.\">个人信息<\/a><\/li>");
+      document.writeln("<\/ul>");
+      document.writeln("<\/div>");
+  </script>
+  
+    
+    
+    <div style="width:100%">
+    
+    <div class="slider">
+    <!-- slides -->
+  <!--	  top:200px;-->
+    <div class="slider__slides">
+      <div class="slide s--active">
+        <div class="slide__inner">
+  <!--        <div class="slide__content">-->
+        <iframe src="self_card.html" width="40%" height="60%"  style="float: right;right: 200px; top:150px;position: relative;border-radius: 2%; opacity: 0.9"></iframe>
+  <!--		  <img src="../static/image/1.jpg" width="40%" height="60%" style="float: right;right: 200px; top:150px; position: relative;border-radius: 2%; opacity: 0.9"></img>-->
+  <!--
+            <h2 class="slide__heading">Clip-Path circular Slider</h2>
+            <p class="slide__text">Cheers now</p>
+  -->
+  <!--        </div>-->
+        </div>
+      </div>
+      <div class="slide" >
+        <div class="slide__inner">
+  <!--        <div class="slide__content">-->
+        <iframe  src="clock.html"  width="40%" height="60%" style="float: right;right: 200px; top:150px;position: relative;border-radius: 2%; opacity: 0.9"></iframe>
+  <!--
+            <h2 class="slide__heading">Creative Slider</h2>
+            <p class="slide__text">Clip-path magic!</p>
+  -->
+  <!--        </div>-->
+        </div>
+      </div>
+      <div class="slide">
+        <div class="slide__inner" >
+  <!--        <div class="slide__content">-->
+        <iframe src="todo_list.html" width="40%" height="60%" style="float: right;right: 200px; top:150px;position: relative;border-radius: 2%; opacity: 0.9"></iframe>
+  <!--
+            <h2 class="slide__heading">Very Professional Effect</h2>
+            <p class="slide__text">It looks wow, isn't it?</p>
+  -->
+  <!--        </div>-->
+        </div>
+      </div>
+      <div class="slide"  >
+        <div class="slide__inner" >
+  <!--        <div class="slide__content">-->
+        <iframe src="clock.html"  width=40%" height="60%" style="float: right;right: 200px; top:150px;position: relative;border-radius: 2%; opacity: 0.9"></iframe>
+  <!--
+            <h2 class="slide__heading">Limited edition design</h2>
+            <p class="slide__text">Which makes the web wow</p>
+  -->
+  <!--        </div>-->
+        </div>
+      </div>
+      <div class="slide s--prev">
+        <div class="slide__inner">
+              <div class="slide__inner">
+        <iframe src="todo_list.html" width="40%" height="60%" style="float: right;right: 200px; top:150px;position: relative;border-radius: 2%; opacity: 0.9" ></iframe>
+        </div>
+        </div>
+      </div>
+    </div>
+  
+  
+  
+    <!-- slides end -->
+    <div class="slider__control">
+      <div class="slider__control-line"></div>
+      <div class="slider__control-line"></div>
+    </div>
+    <div class="slider__control slider__control--right m--right">
+      <div class="slider__control-line"></div>
+      <div class="slider__control-line"></div>
+    </div>
+  
+  <!--my-->
+  </div>
+  
+  
+  </div>
+     <script>
+      (function() {
+    var $slides = document.querySelectorAll('.slide');
+    var $controls = document.querySelectorAll('.slider__control');
+    var numOfSlides = $slides.length;
+    var slidingAT = 1300; // sync this with scss variable
+    var slidingBlocked = false;
+    [].slice.call($slides).forEach(function($el, index) {
+      var i = index + 1;
+      $el.classList.add('slide-' + i);
+      $el.dataset.slide = i;
+    });
+    [].slice.call($controls).forEach(function($el) {
+      $el.addEventListener('click', controlClickHandler);
+    });
+    function controlClickHandler() {
+      if (slidingBlocked) return;
+      slidingBlocked = true;
+      var $control = this;
+      var isRight = $control.classList.contains('m--right');
+      var $curActive = document.querySelector('.slide.s--active');
+      var index = +$curActive.dataset.slide;
+      (isRight) ? index++ : index--;
+      if (index < 1) index = numOfSlides;
+      if (index > numOfSlides) index = 1;
+      var $newActive = document.querySelector('.slide-' + index);
+      $control.classList.add('a--rotation');
+      $curActive.classList.remove('s--active', 's--active-prev');
+      document.querySelector('.slide.s--prev').classList.remove('s--prev');
+      
+      $newActive.classList.add('s--active');
+      if (!isRight) $newActive.classList.add('s--active-prev');
+      
+      var prevIndex = index - 1;
+      if (prevIndex < 1) prevIndex = numOfSlides;
+      document.querySelector('.slide-' + prevIndex).classList.add('s--prev');
+      setTimeout(function() {
+        $control.classList.remove('a--rotation');
+        slidingBlocked = false;
+      }, slidingAT*0.75);
+    };
+  }());
+      </script>
+  </body>
+  clip.html
+  </html>

@@ -1,0 +1,8 @@
+终于等到你， {{ name }}！
+
+只差最后一步，点击下方的安全链接，即刻开启你的 DDL 管理之旅！
+
+{{ url_for('auth.confirm', token=token, _external=True) }}
+
+无比激动地，
+DDL Manager 项目组

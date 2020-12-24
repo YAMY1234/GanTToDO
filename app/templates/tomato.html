@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>CodePen - Pomodoro Clock</title>
+
+    <link rel="stylesheet prefetch" href="https://cdnjs.cloudflare.com/ajax/libs/flipclock/0.7.8/flipclock.css">
+    <link rel="stylesheet prefetch" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+	
+<!--	导航栏部分-->
+	<!-- <link rel="stylesheet" type="text/css" href="css/nav.css">
+<link rel="stylesheet" type="text/css" href="font/iconfont.css">
+
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/nav.js"></script> -->
+<!--	导航栏部分结束-->
+	
+	
+	
+    <style>
+        body {
+/*			background: rgb(197,94,94);*/
+            background: url("../static/image/123.png"); 
+			border-bottom-color: rgb(197,94,94);
+			background-size:cover;
+/*			no-repeat center center fixed;*/
+            background-size: cover;
+        }
+
+        .pomodoro {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 500px;
+            padding-top: 15px;
+            padding-bottom: 25px;
+        }
+
+        p {
+            text-align: center;
+        }
+
+        .flip-clock-wrapper {
+            max-width: 460px;
+            margin: 3em auto 2em;
+            display: flex;
+            justify-content: center;
+        }
+
+        .col-md-4 {
+            display: flex;
+            justify-content: center;
+        }
+
+        .col-md-2 {
+            display: flex;
+            justify-content: center;
+            height: 34px;
+            align-items: center;
+        }
+
+        .counter {
+            display: flex;
+            justify-content: center;
+        }
+
+        .clock {
+            margin-top: 30px;
+        }
+
+        .container {
+            width: 500px;
+        }
+
+        .middle {
+            display: inline-block;
+        }
+
+        #btns {
+            display: flex;
+            justify-content: center;
+        }
+
+        #stop {
+            margin-left: 10px;
+            margin-right: 10px;
+        }
+
+        .btn {
+            background-color: #333333;
+            color: #CCCCCC;
+        }
+
+        #sessInc,
+        #sessDec,
+        #breakInc,
+        #breakDec {
+            font-weight: bold;
+        }
+
+        #stats {
+            background-color: #333333;
+            width: 220px;
+            height: 70px;
+            border-radius: 10px;
+            color: #CCCCCC;
+            font-size: 45px;
+            text-align: center;
+        }
+
+        #statRow {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+    </style>
+
+    <script>
+        window.console = window.console || function (t) { };
+    </script>
+
+    <script>
+        if (document.location.search.match(/type=embed/gi)) {
+            window.parent.postMessage("resize", "*");
+        }
+    </script>
+
+    <script src="chrome-extension://ocggccaacacpienfcgmgcihoombokbbj/pages/client/livestartpage-message-add.js"></script>
+</head>
+
+<body translate="no">
+<script>
+ document.writeln("<style type=\"text/css\">");
+    document.writeln(".schmenu{z-index:999;position:absolute; height:50px; line-height:50px; background:#636871; opacity:0.9; width:100%; margin:0 auto; overflow:hidden;}");
+    document.writeln(".schmenu ul{width:1180px; margin:0 auto; overflow:hidden;}");
+    document.writeln(".schmenu ul li{float:left;list-style:none;}");
+    document.writeln(".schmenu ul li a{height:50px; line-height:50px; display:block;color:#fff; font-size: 16px; padding: 0 10px;text-decoration: none;}");
+    document.writeln(".schmenu ul li a:hover{color:#fff; background:#000; text-decoration:none;-moz-transition:all 0.2s ease;-webkit-transition:all 0.2s ease;-o-transition:all 0.2s ease;-moz-transition:all 0.2s ease;transition:all 0.2s ease;}");
+    document.writeln("<\/style>");
+    document.writeln("<div class=\"schmenu\">");
+    document.writeln("<ul>");
+	    	document.writeln("<li style='float:left'><img class='logo' src='../static/image/999.png'>");
+    document.writeln("<li style='float:left'><a href=\"homepage.html\">返回首页<\/a><\/li>");
+    document.writeln("<li style='float:right'><a href=\"gantt.html\" target=\"_blank\">您的gantt界面<\/a><\/li>");
+    document.writeln("<li style='float:right'><a href=\"todo_list.html\" target=\"_blank\">您的todoList<\/a><\/li>");
+    document.writeln("<li style='float:right'><a href=\"tomato.html\" target=\"_blank\">您的番茄工作时钟<\/a><\/li>");
+    document.writeln("<li style='float:right'><a href=\"profile.html\">您的个人信息<\/a><\/li>");
+    document.writeln("<\/ul>");
+    document.writeln("<\/div>");
+</script>
+
+    <div class="pomodoro" style="top: 400px;position: fixed">
+		<strong style="font-size: 30px; text-align: center;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;您的番茄工作钟时间到!</strong>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="row">
+                    <p>session length</p>
+                    <p></p>
+                </div>
+                <div class="row counter">
+                    <div class="col-md-4">
+                        <button class="btn btn-default" id="sessDec">-</button>
+                    </div>
+                    <div class="col-md-2">
+                        <div id="session">25</div>
+                    </div>
+                    <div class="col-md-4">
+                        <button class="btn btn-default" id="sessInc">+</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="row">
+                    <p>break length</p>
+                    <p></p>
+                </div>
+                <div class="row counter">
+                    <div class="col-md-4">
+                        <button class="btn btn-default" id="breakDec">-</button>
+                    </div>
+                    <div class="col-md-2">
+                        <div id="break">5</div>
+                    </div>
+                    <div class="col-md-4">
+                        <button class="btn btn-default" id="breakInc">+</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="clock" class="row">
+			
+            <div class="timer flip-clock-wrapper">
+                <span class="flip-clock-divider minutes">
+                    <span class="flip-clock-label">Minutes</span>
+                    <span class="flip-clock-dot top"></span>
+                    <span class="flip-clock-dot bottom"></span>
+                </span>
+                <ul class="flip ">
+                    <li class="flip-clock-before">
+                        <a href="#">
+                            <div class="up">
+                                <div class="shadow"></div>
+                                <div class="inn">9</div>
+                            </div>
+                            <div class="down">
+                                <div class="shadow"></div>
+                                <div class="inn">9</div>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="flip-clock-active">
+                        <a href="#">
+                            <div class="up">
+                                <div class="shadow"></div>
+                                <div class="inn">0</div>
+                            </div>
+                            <div class="down">
+                                <div class="shadow"></div>
+                                <div class="inn">0</div>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+                <ul class="flip ">
+                    <li class="flip-clock-before">
+                        <a href="#">
+                            <div class="up">
+                                <div class="shadow"></div>
+                                <div class="inn">9</div>
+                            </div>
+                            <div class="down">
+                                <div class="shadow"></div>
+                                <div class="inn">9</div>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="flip-clock-active">
+                        <a href="#">
+                            <div class="up">
+                                <div class="shadow"></div>
+                                <div class="inn">0</div>
+                            </div>
+                            <div class="down">
+                                <div class="shadow"></div>
+                                <div class="inn">0</div>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+                <span class="flip-clock-divider seconds">
+                    <span class="flip-clock-label">Seconds</span>
+                    <span class="flip-clock-dot top"></span>
+                    <span class="flip-clock-dot bottom"></span>
+                </span>
+                <ul class="flip ">
+                    <li class="flip-clock-before">
+                        <a href="#">
+                            <div class="up">
+                                <div class="shadow"></div>
+                                <div class="inn">9</div>
+                            </div>
+                            <div class="down">
+                                <div class="shadow"></div>
+                                <div class="inn">9</div>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="flip-clock-active">
+                        <a href="#">
+                            <div class="up">
+                                <div class="shadow"></div>
+                                <div class="inn">0</div>
+                            </div>
+                            <div class="down">
+                                <div class="shadow"></div>
+                                <div class="inn">0</div>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+                <ul class="flip ">
+                    <li class="flip-clock-before">
+                        <a href="#">
+                            <div class="up">
+                                <div class="shadow"></div>
+                                <div class="inn">9</div>
+                            </div>
+                            <div class="down">
+                                <div class="shadow"></div>
+                                <div class="inn">9</div>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="flip-clock-active">
+                        <a href="#">
+                            <div class="up">
+                                <div class="shadow"></div>
+                                <div class="inn">0</div>
+                            </div>
+                            <div class="down">
+                                <div class="shadow"></div>
+                                <div class="inn">0</div>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="row" id="statRow">
+            <div id="stats">pomodoro</div>
+        </div>
+        <div class="container">
+            <div class="row" id="btns">
+                <button class="btn btn-default btn-lg" id="start">start</button>
+                <button class="btn btn-default btn-lg" id="stop">stop</button>
+                <button class="btn btn-default btn-lg" id="clear">clear</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flipclock/0.7.8/flipclock.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            var countS = 25;
+            $("#session").html(countS);
+            var countB = 5;
+            $("#break").html(countB);
+            var pos = "pomodoro";
+            var countLama;
+            var posLama;
+            var count;
+            $("#stats").html(pos);
+            var clock = $(".timer").FlipClock(0, {
+                countdown: true,
+                clockFace: 'MinuteCounter',
+                autoStart: false,
+                callbacks: {
+                    interval: function () {
+                        if (clock.getTime() == 0) {
+                            if (pos == "session") {
+                                clock.setTime(countB * 60);
+                                clock.start();
+                                pos = "break";
+                                $("#stats").html(pos);
+                            } else if (pos == "break") {
+                                clock.setTime(countS * 60);
+                                clock.start();
+                                pos = "session";
+                                $("#stats").html(pos);
+                            }
+                        }
+                    }
+                }
+            })
+            //SESSION
+            $("#sessInc").on("click", function () {
+                if ($("#session").html() > 0) {
+                    countS = parseInt($("#session").html());
+                    countS += 1;
+                    $("#session").html(countS);
+                    //clock.setTime(countS*60);
+                }
+            });
+            $("#sessDec").on("click", function () {
+                if ($("#session").html() > 1) {
+                    countS = parseInt($("#session").html());
+                    countS -= 1;
+                    $("#session").html(countS);
+                    //clock.setTime(countS*60);
+                }
+            });
+            //BREAK
+            $("#breakInc").on("click", function () {
+                if ($("#break").html() > 0) {
+                    countB = parseInt($("#break").html());
+                    countB += 1;
+                    $("#break").html(countB);
+                }
+            });
+            $("#breakDec").on("click", function () {
+                if ($("#break").html() > 1) {
+                    countB = parseInt($("#break").html());
+                    countB -= 1;
+                    $("#break").html(countB);
+                }
+            });
+            $("#start").on("click", function () {
+                if (count != countS || clock.getTime() == 0) {
+                    clock.setTime(countS * 60);
+                    pos = "session";
+                    $("#stats").html(pos);
+                } else {
+                    pos = posLama;
+                    $("#stats").html(pos);
+                }
+                count = countS;
+                clock.start();
+            });
+            $("#stop").on("click", function () {
+                clock.stop();
+                countLama = clock.getTime();
+                posLama = $("#stats").html();
+            });
+            $("#clear").on("click", function () {
+                clock.stop();
+                pos = "pomodoro";
+                $("#stats").html(pos);
+                clock.setTime(0);
+            });
+        });
+            //# sourceURL=pen.js
+    </script>
+
+</body>

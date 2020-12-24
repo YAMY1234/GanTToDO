@@ -1,0 +1,42 @@
+<head>
+    {% if skip %}
+    <meta http-equiv="refresh" content="2;url=/">
+    {% endif %}
+    <link rel="icon" href="data:image/ico;base64,aWNv">
+    <style>
+        .body {
+            background: #ffffff;
+            width: 100%;
+            height: 100%;
+            margin-top: 1%;
+            text-align: center;
+        }
+
+        .img {
+            padding-top: 8%;
+        }
+
+        .body-h {
+            letter-spacing: 20px;
+            font-size: 30px;
+            margin-left: 4%
+        }
+    </style>
+</head>
+
+<div class="container-fluid main">
+
+
+    <div class="row">
+        <div class="body">
+            <div>
+                <img class="img" src="../../static/image/pass.png">
+            </div>
+            <div>
+                <h4 class="body-h">{{ head }}</h4>
+                <p>{{ mes1 }}</p>
+                <p>{{ mes2 }}</p>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,79 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>登录</title>
+    <script src="../static/lib/basic/js/jquery.min.js"></script>
+    <script src="../static/lib/basic//js/flipclock.js"></script>
+    <link rel="icon" href="data:image/ico;base64,aWNv">
+    <link href="../static/lib/basic/css/style.css" type="text/css" rel="stylesheet">
+    <link href="../static/lib/basic/css/flipclock.css" type="text/css" rel="stylesheet">
+</head>
+
+<body>
+    <form id="bigBox" action="" method="POST" enctype="application/x-www-form-urlencoded">
+        <h1>LOGIN</h1>
+        <div class="inputBox">
+            <div class="inputText">
+                <span class="iconfont icon-nickname"></span>
+                <input type="text" placeholder="邮箱" name="user" />
+            </div>
+            <div class="inputText">
+                <span class="iconfont icon-visible"></span>
+                <input type="password" placeholder="密码" name="password" />
+            </div>
+        </div>
+        <input class="loginButton" type="submit" value="登录" />
+        <a href={{ url_for('auth.register') }}>
+            <input class="registerButton" type="button" value="注册" />
+        </a>
+    </form>
+    <div class="lhy_bgcontainer"></div>
+    <div id="slideshow">
+        <img class="active" src="../static/image/2.png" />
+    </div>
+
+    <div id="lhy_clock">
+        <div class="clock" style="margin-right:auto; margin-left:auto;margin-top:1px; position:fixed"></div>
+        <script type="text/javascript">
+            var clock;
+            $(document).ready(function () {
+                clock = $('.clock').FlipClock({
+                    clockFace: 'TwelveHourClock'
+                });
+            });
+        </script>
+    </div>
+    <div>
+
+        <script>
+            /*这个slideshow主要是针对于填表里面的一些细节部分了*/
+            function slideshow() {
+                var slideshow = document.getElementById("slideshow"),
+                    imgs = slideshow.getElementsByTagName("img"),
+                    current = 0;
+
+                function slideOff() {
+                    imgs[current].className = "";
+                }
+                function slideOn() {
+                    imgs[current].className = "active";
+                }
+
+                function changeSlide() {
+                    slideOff();
+                    current++;
+                    if (current >= 14) current = 0;
+                    slideOn();
+                }
+                var slideon = setInterval(changeSlide, 20000000);
+            }
+            slideshow();
+
+        </script>
+    </div>
+</body>
+
+</html>

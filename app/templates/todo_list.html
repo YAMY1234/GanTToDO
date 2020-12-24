@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>事项清单</title>
+  <link rel="icon" href="data:image/ico;base64,aWNv">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intro.js@2.9.3/minified/introjs.min.css" />
+  <link rel="stylesheet" href="../static/lib/todolist/styles.css" />
+  <link rel="stylesheet" href="../static/lib/home/css/bootstrap.min.css" />
+	
+	
+	
+	
+
+  <noscript>
+    <style>
+      .todo-list,
+      .make {
+        display: none;
+      }
+
+      form input,
+      button:hover {
+        cursor: not-allowed;
+      }
+    </style>
+  </noscript>
+</head>
+
+<body style="background-image: url(../static/image/2.png)">
+  <style>
+    .button {
+      background-color: rgb(248, 203, 109);
+      /* Green */
+      border: none;
+      color: rgba(228, 171, 5, 1.00);
+      padding: 8px 32px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin: 4px 2px;
+      -webkit-transition-duration: 0.4s;
+      /* Safari */
+      transition-duration: 0.4s;
+      cursor: pointer;
+    }
+
+    .button3 {
+      color: rgba(228, 171, 5, 1.00);
+      color: black;
+      border: 2px solid #f44336;
+    }
+
+    .button3:hover {
+      background-color: rgb(255, 171, 144);
+      color: white;
+    }
+	  .logo {
+        top:2px;
+        vertical-align: middle;
+        border-style: none;
+        max-height: 45px;
+        left:10px;
+        position: fixed;
+    }
+  </style>
+	
+	<div style="top:0px;"> 
+ 
+	  <!--	导航栏部分-->
+	<!-- <link rel="stylesheet" type="text/css" href="css/nav.css">
+<link rel="stylesheet" type="text/css" href="font/iconfont.css">
+
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/nav.js"></script> -->
+<!--	导航栏结束-->
+	  <!--	导航栏部分-->
+<script>
+    document.writeln("<style type=\"text/css\">");
+    document.writeln(".schmenu{z-index:999;position:absolute; height:50px; line-height:50px; background:#636871;opacity:0.9; width:100%; margin:0 auto; overflow:hidden;}");
+    document.writeln(".schmenu ul{width:1180px; margin:0 auto; overflow:hidden;}");
+    document.writeln(".schmenu ul li{float:left;list-style:none;}");
+    document.writeln(".schmenu ul li a{height:50px; line-height:50px; display:block;color:#fff; font-size: 16px; padding: 0 10px;text-decoration: none;}");
+    document.writeln(".schmenu ul li a:hover{color:#fff; background:#000; text-decoration:none;-moz-transition:all 0.2s ease;-webkit-transition:all 0.2s ease;-o-transition:all 0.2s ease;-moz-transition:all 0.2s ease;transition:all 0.2s ease;}");
+    document.writeln("<\/style>");
+    document.writeln("<div class=\"schmenu\">");
+    document.writeln("<ul>");
+	document.writeln("<li style='float:left'><img class='logo' src='../static/image/999.png'>");
+    document.writeln("<li style='float:left'><a href=\"homepage.html\">返回首页<\/a><\/li>");
+    document.writeln("<li style='float:right'><a href=\"gantt.html\" target=\"_blank\">您的gantt界面<\/a><\/li>");
+    document.writeln("<li style='float:right'><a href=\"todo_list.html\" target=\"_blank\">您的todoList<\/a><\/li>");
+    document.writeln("<li style='float:right'><a href=\"tomato.html\" target=\"_blank\">您的番茄工作时钟<\/a><\/li>");
+    document.writeln("<li style='float:right'><a href=\"profile.html\">您的个人信息<\/a><\/li>");
+    document.writeln("<\/ul>");
+    document.writeln("<\/div>");
+</script>
+	</div>
+	   <header style="top:20px ;height: 30px">   <header>
+        <br><br><br><br><br><br>
+      <h1 style="top:20px">管理你的事件清单
+      </h1>
+    </header>
+	
+  <div id="app">
+    <span class="material-icons help" @click="help" tabindex="0" aria-label="help">help</span>
+<!--    <a href="https://github.com/realcyguy/vue-todo" class="github-corner" aria-label="View source on GitHub">-->
+<!--
+      <button class="button button3" style="position: absolute; right: 10px">
+        <a style="font: normal;color:darkred" href={{ url_for("main.index") }}>返回主页</a>
+      </button>
+-->
+      <!--
+        <svg
+          width="80"
+          height="80"
+          viewBox="0 0 250 250"
+          style="
+            fill: #ffa991;
+            color: #fff;
+            position: absolute;
+            top: 0;
+            border: 0;
+            right: 0;
+          "
+          aria-hidden="true"
+
+        </svg>
+-->
+  
+	  
+    <form @submit.prevent="addTodo">
+      <input type="text" id="newtodo" v-model="input" placeholder="Enable javascript..." :placeholder="placeholders[0]"
+        title="What you need to do" data-intro="Enter your todo text here." data-step="1" />
+      <button type="submit" data-intro="Click to add todo to list." data-step="2">
+        Add
+      </button>
+    </form>
+    <div class="buttons" data-intro="Self-explanatory buttons." data-step="3">
+      <button @click="removeAll">Remove all</button>
+      <button @click="removeCompleted">Remove completed</button>
+    </div>
+    <draggable v-model="todos" v-if="todos.length" handle=".reorder" class="todo-container">
+      <transition-group tag="ul" name="todo" class="todo-list" appear>
+        <todo-item v-for="todo in todos" :todo="todo" :key="todo.id" @remove-todo="removeTodo"
+          @toggle-todo="toggleTodo"></todo-item>
+      </transition-group>
+    </draggable>
+    <p class="make todo-message" v-else>Go make a todo!</p>
+    <noscript>
+      <p class="todo-message">
+        This app requires javascript to run.
+      </p>
+    </noscript>
+  </div>
+
+  <!-- Development Vue.js -->
+  <!-- <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script> -->
+  <!-- Production Vue.js -->
+  <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+  <!-- UUID -->
+  <script src="https://cdn.jsdelivr.net/npm/uuid@latest/dist/umd/uuidv4.min.js"></script>
+  <!-- SortableJS and Vue.Draggable  -->
+  <script
+    src="https://cdn.jsdelivr.net/combine/npm/sortablejs@1.10.2,gh/SortableJS/Vue.Draggable@.19.2/dist/vuedraggable.umd.min.js"></script>
+  <!-- Intro.js -->
+  <script src="https://cdn.jsdelivr.net/npm/intro.js@2.9.3/minified/intro.min.js"></script>
+  <!-- Script -->
+  <script src="../static/lib/todolist/app.js"></script>
+</body>
+
+</html>
